@@ -1,0 +1,19 @@
+# Build and dependency folders
+node_modules
+dist
+build
+coverage
+
+# Lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Compiled/generated code
+*.min.js
+*.min.css
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local

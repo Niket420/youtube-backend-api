@@ -1,0 +1,19 @@
+{
+  "name": "youtube",
+  "version": "1.0.0",
+  "description": "Backend API for YouTube",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "code": "node index.js"
+  },
+  "author": "Niket Anand",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "prettier": "3.8.1"
+  }
+}
