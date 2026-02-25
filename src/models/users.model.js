@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import crypto from 'crypto'
 
 
 
@@ -84,3 +85,20 @@ userSchema.methods.generateRefreshToken = jwt.sign(
         process.env.JWT_REFRESH_SECRET,
         {expiresIn:process.env.REFRESH_TOKEN_EXPIRY}
 )
+
+userSchema.methods.generateTemperoryToken = function(){
+        const unHashedToken =  crypto.randomBytes(20).toString("hex") 
+        
+        const HashedToken =  crypto.createHash('sha256')
+                                    .update(unHashedToken)
+                                    .digest("hex")
+
+        const tokenExpiry = Date.now() + (20*60 + 1000)
+
+        return {unHashedToken, HashedToken, tokenExpiry}
+
+}
+
+
+
+export const User = mongoose.model('User', userSchema);
