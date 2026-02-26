@@ -60,3 +60,60 @@ const generateAccessAndRefreshToken = asyncHandler(async(userId)=>{
         throw new APIError(500, "Something went wrong while generating referesh and access token")
     }
 })
+
+const login = asyncHandler(async(req,res)=>{
+    const {email,password} = req.body;
+
+    if(!email || !password){
+        throw new APIError(400,"Username and Password both are required")
+    }
+
+    const user = await User.findOne({email})
+    if(!user){throw new APIError(400,"No user found")}
+
+    const isPasswordValid = await User.isPasswordCorrect(password)
+    if(!isPasswordValid){
+        throw new APIError(401,"Invalid Credentials")
+    }
+
+    const {accessToken , refreshToken} = User.generateAccessAndRefreshToken(user._id)
+
+    const loggedInUser = await User.findById(user._id).select("-password -refershToken -avatar -coverImage")
+
+    const options = {
+        httpOnly:true,
+        secure:true,
+    };
+
+    return res
+            .status(200)
+            .cookie("accessToken",accessToken,options)
+            .cookie("refreshToken",refreshToken,options)
+            .json(
+                new APIResponse(
+                    200,
+                    {
+                        user: loggedInUser,
+                    },"User logged in Successfully"
+                )
+            )
+
+});
+
+const logout = {}
+
+const refreshAccessToken={}
+
+const changeCurrentPassword={}
+
+const getCurrentUser = {}
+
+const updateAccountDetails={}
+
+const updateUserAvatar = {}
+
+const updateUserCoverImage = {}
+
+const getUserChannelProfile = {}
+
+const getWatchHistory = {}
