@@ -45,3 +45,18 @@ const registerUser = asyncHandler(async(req,res)=>{
     )
 
 })
+
+const generateAccessAndRefreshToken = asyncHandler(async(userId)=>{
+    try{
+        const user = await User.findById(userId)
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
+
+        user.refreshToken = refreshToken
+        await save({validateBeforeSave:false})
+        return {accessToken,refreshToken}
+    }
+    catch(error){
+        throw new APIError(500, "Something went wrong while generating referesh and access token")
+    }
+})
