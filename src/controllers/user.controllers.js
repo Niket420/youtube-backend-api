@@ -218,38 +218,100 @@ return res
         .json(new APIResponse(201,user,"user get updated successfully"))
 })
 
-const updateUserAvatar = asyncHandler(async(req,res)=>{
-    const AvatarImgLocalPath = req.file?.path
-   
-    if(!AvatarImgLocalPath){
-        throw new APIError(400,"Invalid local path")
+const updateUserAvatar = asyncHandler(async (req, res) => {
+    const AvatarImgLocalPath = req.file?.path;
+
+    if (!AvatarImgLocalPath) {
+        throw new APIError(400, "Invalid local path");
     }
 
+    const user = await User.findById(req.user._id);
 
-    cloudinary.v2.uploader.destroy(user.coverImage.public_id)
-
-    const newAvatar = await uploadCloudinary(AvatarImgLocalPath)
-
-    if(!newAvatar){
-        throw new APIError(400,"Image Upload Failed")
+    if (user.avatar?.public_id) {
+        await cloudinary.v2.uploader.destroy(user.avatar.public_id);
     }
 
-    const user = await User.findByIdAndUpdate(req.user._id,
+    const newAvatar = await uploadCloudinary(AvatarImgLocalPath);
+
+    if (!newAvatar) {
+        throw new APIError(400, "Image Upload Failed");
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
         {
-        $set:{
-            coverImage : newAvatar.url
-        }
-    },
-        {set:true}).select("-password")
+            $set: {
+                Avatar: {
+                    url: newAvatar.secure_url,
+                    public_id: newAvatar.public_id
+                }
+            }
+        },
+        { new: true }
+    ).select("-password");
 
     return res
-            .status(201)
-            .json(new APIResponse(201,user,"Avatar is updated successfully"))
+        .status(200)
+        .json(new APIResponse(200, updatedUser, "Avatar updated successfully"));
+});
 
-})
+const updateCoverImg = asyncHandler(async (req, res) => {
+    const CoverImgLocalPath = req.file?.path;
 
-const updateUserCoverImage = {}
+    if (!CoverImgLocalPath) {
+        throw new APIError(400, "Invalid local path");
+    }
 
-const getUserChannelProfile = {}
+    const user = await User.findById(req.user._id);
 
-const getWatchHistory = {}
+    if (user.coverImage?.public_id) {
+        await cloudinary.v2.uploader.destroy(user.coverImage.public_id);
+    }
+
+    const newCover = await uploadCloudinary(CoverImgLocalPath);
+
+    if (!newCover) {
+        throw new APIError(400, "Image Upload Failed");
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                coverImage: {
+                    url: newAvatar.secure_url,
+                    public_id: newAvatar.public_id
+                }
+            }
+        },
+        { new: true }
+    ).select("-password");
+
+    return res
+        .status(200)
+        .json(new APIResponse(200, updatedUser, "Avatar updated successfully"));
+});
+
+// const getUserChannelProfile = asyncHandler(async(req,res)=>{
+//     const {username} = req.params
+
+//     if(!username?.trim()){
+//         throw new APIError(400,"user not found")
+//     }
+
+//     const channel = await User.aggregate([
+//         {
+//             $match : {
+//                 username : username?.tolowercase()
+//             }
+//         },
+
+//         {
+
+//         }
+//     ])
+
+
+// })
+
+// const getWatchHistory = {}
