@@ -172,13 +172,81 @@ const refreshAccessToken = asyncHandler(async(req,res)=>{
     }
 })
 
-const changeCurrentPassword={}
+const changeCurrentPassword = asyncHandler(async(req,res)=>{
+    const {oldPassword, newPassword} = req.body
+    const user = await User.findById(req.user?._id)
+    
+    const isPasswordValid = await User.isPasswordCorrect(oldPassword)
 
-const getCurrentUser = {}
+    if(!isPasswordValid){
+        throw new APIError(400,"Invalid old password")
+    }
 
-const updateAccountDetails={}
+    user.password = newPassword
+    await user.save()
 
-const updateUserAvatar = {}
+    return res
+        .status(200)
+        .json(new APIResponse(200,{},"Password Changed Successfully"))
+
+})
+
+const getCurrentUser = asyncHandler(async(req,res)=>{
+    return res
+            .status(200)
+            .json(new APIResponse(200, req.user, "User fetch Successfully"))
+})
+
+const updateAccountDetails = asyncHandler(async(req,res)=>{
+    const {fullname, email} = req.body()
+
+    if(!fullname  || !email){
+        throw new APIError(400,"All Fields ar required")
+    }
+
+    const user = User.findByIdAndUpdate(req.user?._id,{
+        $set:{
+            fullname,
+            email: email
+        }
+    },
+    {new:true}
+).select("-password")
+
+return res
+        .status(201)
+        .json(new APIResponse(201,user,"user get updated successfully"))
+})
+
+const updateUserAvatar = asyncHandler(async(req,res)=>{
+    const AvatarImgLocalPath = req.file?.path
+   
+    if(!AvatarImgLocalPath){
+        throw new APIError(400,"Invalid local path")
+    }
+
+
+    cloudinary.v2.uploader.destroy(user.coverImage.public_id)
+
+    const newAvatar = await uploadCloudinary(AvatarImgLocalPath)
+
+    if(!newAvatar){
+        throw new APIError(400,"Image Upload Failed")
+    }
+
+    const user = await User.findByIdAndUpdate(req.user._id,
+        {
+        $set:{
+            coverImage : newAvatar.url
+        }
+    },
+        {set:true}).select("-password")
+
+    return res
+            .status(201)
+            .json(new APIResponse(201,user,"Avatar is updated successfully"))
+
+})
 
 const updateUserCoverImage = {}
 
