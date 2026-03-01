@@ -241,7 +241,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         req.user._id,
         {
             $set: {
-                Avatar: {
+                avatar: {
                     url: newAvatar.secure_url,
                     public_id: newAvatar.public_id
                 }
