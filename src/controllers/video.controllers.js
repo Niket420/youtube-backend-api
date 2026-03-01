@@ -125,12 +125,21 @@ const publishAVideo = asyncHandler(async (req, res) => {
 
 const getVideoById = asyncHandler(async (req, res) => {
     const { videoId } = req.params
-    //TODO: get video by id
+
+    const searchedVideo = await Video.findById(videoId)
+    if(!searchedVideo){
+        throw new APIError(404,"Video Not Found")
+    }
+
+    return res.status(200)
+                .json(new APIResponse(200,searchedVideo,"Video Found"))
+    
 })
 
 const updateVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
     //TODO: update video details like title, description, thumbnail
+    
 
 })
 
