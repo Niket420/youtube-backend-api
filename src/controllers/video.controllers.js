@@ -1,8 +1,8 @@
 import mongoose, {isValidObjectId} from "mongoose"
-import {Video} from "../models/video.model.js"
-import {User} from "../models/user.model.js"
-import {ApiError} from "../utils/ApiError.js"
-import {ApiResponse} from "../utils/ApiResponse.js"
+import {Video} from "../models/videos.models.js"
+import {User} from "../models/users.models.js"
+import {APIError} from "../utils/APIError.js"
+import {APIResponse} from "../utils/APIResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 
@@ -73,8 +73,54 @@ const getAllVideos = asyncHandler(async (req, res) => {
 })
 
 const publishAVideo = asyncHandler(async (req, res) => {
-    const { title, description} = req.body
-    // TODO: get video, upload to cloudinary, create video
+
+    const { title, description } = req.body
+
+    const videoFile = req.files?.video?.[0]
+    const thumbnailFile = req.files?.thumbnail?.[0]
+
+    if (!title || !description) {
+        throw new APIError(400, "Please fill all details")
+    }
+
+    if (!videoFile) {
+        throw new APIError(400, "Video not selected")
+    }
+
+    // Upload video
+    const uploadVideo = await uploadOnCloudinary(videoFile.path)
+
+    if (!uploadVideo) {
+        throw new APIError(500, "Video upload failed")
+    }
+
+    let thumbnailUrl
+
+    if (thumbnailFile) {
+        const uploadedThumbnail = await uploadOnCloudinary(thumbnailFile.path)
+        thumbnailUrl = uploadedThumbnail.secure_url
+    } else {
+        thumbnailUrl = cloudinary.url(uploadVideo.public_id, {
+            resource_type: "video",
+            format: "jpg",
+            transformation: [{ start_offset: "2" }]
+        })
+    }
+
+    const video = await Video.create({
+        videofile: uploadVideo.secure_url,
+        thumbnail: thumbnailUrl,
+        title,
+        description,
+        duration: uploadVideo.duration,
+        views: 0,
+        isPublished: true,
+        owner: req.user._id
+    })
+
+    return res.status(201).json(
+        new APIResponse(201, video, "Successfully uploaded")
+    )
 })
 
 const getVideoById = asyncHandler(async (req, res) => {
