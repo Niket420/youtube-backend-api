@@ -194,7 +194,6 @@ const updateVideo = asyncHandler(async (req, res) => {
     )
 })
 
-
 const deleteVideo = asyncHandler(async (req, res) => {
 
     const { videoId } = req.params
@@ -232,7 +231,25 @@ const deleteVideo = asyncHandler(async (req, res) => {
 })
 
 const togglePublishStatus = asyncHandler(async (req, res) => {
+
     const { videoId } = req.params
+
+    const video = await Video.findById(videoId)
+
+    if (!video) {
+        throw new APIError(404, "Video not found")
+    }
+
+    if (!video.owner.equals(req.user._id)) {
+        throw new APIError(403, "Authorization denied")
+    }
+
+    video.isPublished = !video.isPublished
+
+    await video.save()
+
+    return res.status(200)
+              .json(new APIResponse(200, video, "Video successfully toggled"))
 })
 
 export {
