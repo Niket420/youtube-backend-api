@@ -1,0 +1,78 @@
+import mongoose, {isValidObjectId} from "mongoose"
+import {User} from "../models/user.model.js"
+import { Subscription } from "../models/subscription.model.js"
+import {APIError} from "../utils/APIError.js"
+import {APIResponse} from "../utils/APIResponse.js"
+import {asyncHandler} from "../utils/asyncHandler.js"
+
+
+const toggleSubscription = asyncHandler(async (req, res) => {
+
+    const { channelId } = req.params
+    const subscriberId = req.user._id
+
+    if (!channelId) {
+        throw new APIError(400, "Channel ID not found")
+    }
+
+    if (channelId.toString() === subscriberId.toString()) {
+        throw new APIError(400, "Can't subscribe to own channel")
+    }
+
+    const existingSubscription = await Subscription.findOne({
+        subscriber: subscriberId,
+        channel: channelId
+    })
+
+    if (existingSubscription) {
+        await Subscription.deleteOne({ _id: existingSubscription._id })
+
+        return res.status(200).json(
+            new APIResponse(200, { subscribed: false }, "Unsubscribed successfully")
+        )
+    }
+
+    await Subscription.create({
+        subscriber: subscriberId,
+        channel: channelId
+    })
+
+    return res.status(200).json(
+        new APIResponse(200, { subscribed: true }, "Subscribed successfully")
+    )
+})
+
+// controller to return subscriber list of a channel
+const getUserChannelSubscribers = asyncHandler(async (req, res) => {
+
+    const { channelId } = req.params
+
+    if (!channelId) {
+        throw new APIError(400, "Channel ID not found")
+    }
+
+    const subsList = await Subscription.find({ channel: channelId })
+
+    return res.status(200).json(
+        new APIResponse(200, subsList, "Subscribers fetched successfully")
+    )
+})
+
+// controller to return channel list to which user has subscribed
+const getSubscribedChannels = asyncHandler(async (req, res) => {
+
+    const subscriberId = req.user._id
+
+    const subsList = await Subscription.find({ subscriber: subscriberId })
+        .populate("channel", "username avatar")
+
+    return res.status(200).json(
+        new APIResponse(200, subsList, "Subscribed channels fetched successfully")
+    )
+})
+
+export {
+    toggleSubscription,
+    getUserChannelSubscribers,
+    getSubscribedChannels
+}
