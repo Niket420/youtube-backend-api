@@ -3,7 +3,7 @@ import {User} from "../models/user.model.js"
 import { Subscription } from "../models/subscription.model.js"
 import {APIError} from "../utils/APIError.js"
 import {APIResponse} from "../utils/APIResponse.js"
-import {asyncHandler} from "../utils/asyncHandler.js"
+import {asyncHandler} from "../utils/asynchandler.js"
 
 
 const toggleSubscription = asyncHandler(async (req, res) => {
