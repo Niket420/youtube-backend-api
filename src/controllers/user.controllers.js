@@ -62,7 +62,7 @@ const generateAccessAndRefreshToken = asyncHandler(async(userId)=>{
     }
 })
 
-const login = asyncHandler(async(req,res)=>{
+const loginUser = asyncHandler(async(req,res)=>{
     const {email,password} = req.body;
 
     if(!email || !password){
@@ -101,7 +101,7 @@ const login = asyncHandler(async(req,res)=>{
 
 });
 
-const logout = asyncHandler(async(req,res)=>{
+const logoutUser = asyncHandler(async(req,res)=>{
     await User.findByIdAndUpdate(req.user._id,{
         $set:{
             refreshToken: "",
@@ -255,7 +255,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         .json(new APIResponse(200, updatedUser, "Avatar updated successfully"));
 });
 
-const updateCoverImg = asyncHandler(async (req, res) => {
+const updateUserCoverImage = asyncHandler(async (req, res) => {
     const CoverImgLocalPath = req.file?.path;
 
     if (!CoverImgLocalPath) {
@@ -315,3 +315,17 @@ const updateCoverImg = asyncHandler(async (req, res) => {
 // })
 
 // const getWatchHistory = {}
+
+export {
+    registerUser,
+    loginUser,
+    logoutUser,
+    refreshAccessToken,
+    changeCurrentPassword,
+    getCurrentUser,
+    updateAccountDetails,
+    updateUserAvatar,
+    updateUserCoverImage,
+    getUserChannelProfile,
+    getWatchHistory
+}
