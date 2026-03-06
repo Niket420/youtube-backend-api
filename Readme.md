@@ -1,9 +1,3 @@
-Below is a clean, professional README suitable for a GitHub backend project. It explains the system, features, architecture, and APIs clearly so someone reading it understands the project quickly.
-
-You can paste this directly into README.md.
-
----
-
 # Video Platform Backend API
 
 A production-ready backend API for a video platform built with Node.js, Express, and MongoDB.
