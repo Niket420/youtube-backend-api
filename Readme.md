@@ -1,4 +1,4 @@
-# Video Platform Backend API
+# YouTube Platform Backend API
 
 A production-ready backend API for a video platform built with Node.js, Express, and MongoDB.
 This system provides complete functionality for video publishing, user authentication, playlists, subscriptions, comments, likes, and channel analytics.
