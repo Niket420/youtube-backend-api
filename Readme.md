@@ -1,121 +1,343 @@
-# YouTube Backend API (Learning Project)
+Below is a clean, professional README suitable for a GitHub backend project. It explains the system, features, architecture, and APIs clearly so someone reading it understands the project quickly.
 
-Backend project scaffold for building a YouTube-style API using Node.js, Express, and MongoDB.
+You can paste this directly into README.md.
 
-## Current Status
+⸻
 
-- Core folder structure is ready.
-- Initial models are created.
-- Utility layer (`APIError`, `APIResponse`, `asynchandler`) is added.
-- Base scripts are available for development and local runs.
+Video Platform Backend API
 
-## Tech Stack
+A production-ready backend API for a video platform built with Node.js, Express, and MongoDB.
+This system provides complete functionality for video publishing, user authentication, playlists, subscriptions, comments, likes, and channel analytics.
 
-- Node.js
-- Express
-- MongoDB + Mongoose
-- Dotenv
-- Nodemon
-- Prettier
+The API follows a RESTful architecture, includes JWT authentication, file uploads with Multer, Cloudinary media storage, and secure middleware-based authorization.
 
-## Project Structure
+⸻
 
-```bash
-c.you_tube_proj/
-├── package.json
-├── Readme.md
-├── public/
-└── src/
-   ├── app.js
-   ├── index.js
-   ├── controllers/
-   │   └── healthCheck.controllers.js
-   ├── db/
-   │   └── index.js
-   ├── middlewares/
-   ├── models/
-   │   ├── comments.model.js
-   │   ├── likes.model.js
-   │   ├── playlist.model.js
-   │   ├── subsription.model.js
-   │   ├── tweet.model.js
-   │   ├── users.model.js
-   │   └── videos.model.js
-   ├── routes/
-   └── utils/
-      ├── APIError.js
-      ├── APIResponse.js
-      └── asynchandler.js
-```
+Tech Stack
 
-## Installation
+Backend
+	•	Node.js
+	•	Express.js
 
-```bash
-npm install
-```
+Database
+	•	MongoDB
+	•	Mongoose ODM
 
-## Environment Variables
+Authentication
+	•	JWT (Access + Refresh Tokens)
+	•	Cookie based authentication
 
-Create a `.env` file in the root and add your configuration (example):
+Media Handling
+	•	Multer (file uploads)
+	•	Cloudinary (video/image storage)
 
-```env
-PORT=8000
-MONGODB_URI=your_mongodb_connection_string
-```
+Security & Middleware
+	•	CORS
+	•	Cookie Parser
+	•	Custom Error Handling
+	•	JWT Authentication Middleware
 
-## Available Scripts
+⸻
 
-```bash
-npm run dev    # Starts server with nodemon
-npm run code   # Starts server with node
-```
+System Architecture
 
-## Dependencies
+The project follows a layered backend architecture:
 
-### Runtime
-- `express` `^5.2.1`
-- `mongoose` `^9.2.1`
-- `dotenv` `^17.3.1`
-- `bcrypt` `^6.0.0`
-- `cors` `^2.8.6`
+Client
+   ↓
+Routes
+   ↓
+Middleware
+   ↓
+Controllers
+   ↓
+Models
+   ↓
+MongoDB
 
-### Development
-- `nodemon` `^3.1.14`
-- `prettier` `3.8.1`
+Key Components
 
-## Common Git Push Issues
+Routes
+	•	Define API endpoints
+	•	Apply middleware
 
-If `git push` fails, check these in order:
+Controllers
+	•	Contain business logic
 
-1. **No upstream branch set**
-  ```bash
-  git push -u origin <your-branch>
-  ```
+Models
+	•	MongoDB schema definitions using Mongoose
 
-2. **Remote not configured**
-  ```bash
-  git remote -v
-  git remote add origin <repo-url>
-  ```
+Middlewares
+	•	Authentication
+	•	File upload
+	•	Error handling
 
-3. **Rejected (non-fast-forward)**
-  ```bash
-  git pull --rebase origin <your-branch>
-  git push
-  ```
+⸻
 
-4. **Authentication/permission errors**
-  - Recheck GitHub login/credential helper.
-  - Ensure you have push access to the repository.
-  - If using HTTPS, use a Personal Access Token instead of a password.
+Core Features
 
-## Next Steps
+1. Authentication System
 
-1. Finalize database connection flow in `src/db/index.js`.
-2. Add route registration in `src/app.js`.
-3. Expand controllers and middleware.
-4. Add request validation and centralized error handling.
+Secure user authentication using JWT tokens stored in cookies.
 
-## Author
+Features include:
+	•	User registration
+	•	User login
+	•	Logout
+	•	Access token refresh
+	•	Change password
+	•	Update account details
+	•	Avatar and cover image upload
 
-- Niket Anand
+Security features:
+	•	Password hashing
+	•	JWT verification middleware
+	•	Cookie-based authentication
+
+⸻
+
+2. Video Management
+
+Users can upload and manage videos.
+
+Features:
+	•	Upload videos with thumbnails
+	•	Auto-generate thumbnails if not provided
+	•	Update video metadata
+	•	Delete videos
+	•	Toggle publish status
+	•	Pagination and search support
+	•	Sort videos by views, date, etc.
+
+Video files are stored in Cloudinary, while metadata is stored in MongoDB.
+
+⸻
+
+3. Playlist System
+
+Users can organize videos into playlists.
+
+Features:
+	•	Create playlist
+	•	Update playlist details
+	•	Delete playlist
+	•	Add video to playlist
+	•	Remove video from playlist
+	•	View playlists created by a user
+
+Each playlist stores references to videos using MongoDB ObjectIds.
+
+⸻
+
+4. Comments System
+
+Users can interact with videos through comments.
+
+Features:
+	•	Add comment
+	•	Edit comment
+	•	Delete comment
+	•	Fetch comments for a video
+	•	Pagination support
+
+⸻
+
+5. Like System
+
+Users can like different types of content.
+
+Supported likes:
+	•	Video likes
+	•	Comment likes
+	•	Tweet likes
+
+Features:
+	•	Toggle like/unlike
+	•	Fetch videos liked by a user
+
+The system uses a single likes collection that references different entities.
+
+⸻
+
+6. Subscription System
+
+Users can subscribe to channels.
+
+Features:
+	•	Subscribe / Unsubscribe
+	•	View channel subscribers
+	•	View channels a user subscribed to
+
+This is implemented using a subscriber → channel relationship.
+
+⸻
+
+7. Channel Analytics
+
+Creators can view statistics about their channel.
+
+Metrics include:
+	•	Total videos uploaded
+	•	Total video views
+	•	Total subscribers
+	•	Total likes on videos
+
+Data is computed using MongoDB aggregation pipelines.
+
+⸻
+
+Media Upload System
+
+The project uses Multer middleware for handling file uploads.
+
+Supported uploads:
+	•	Avatar
+	•	Cover Image
+	•	Video files
+	•	Video thumbnails
+
+Uploaded media is stored in Cloudinary and the URLs are saved in MongoDB.
+
+⸻
+
+Security Features
+
+The API implements several security best practices:
+	•	JWT authentication
+	•	Protected routes using middleware
+	•	CORS configuration
+	•	Cookie-based session management
+	•	Input validation
+	•	File upload restrictions
+	•	Ownership checks for resources
+
+⸻
+
+Example Protected Route
+
+GET /api/v1/users/current-user
+
+Request flow:
+
+Client Request
+      ↓
+verifyJWT middleware
+      ↓
+Controller
+      ↓
+Database query
+      ↓
+Response
+
+
+⸻
+
+Project Structure
+
+src
+ ├ controllers
+ │    user.controller.js
+ │    video.controller.js
+ │    playlist.controller.js
+ │    comment.controller.js
+ │    like.controller.js
+ │
+ ├ models
+ │    user.model.js
+ │    video.model.js
+ │    playlist.model.js
+ │    comment.model.js
+ │    like.model.js
+ │
+ ├ routes
+ │    user.routes.js
+ │    video.routes.js
+ │    playlist.routes.js
+ │
+ ├ middlewares
+ │    auth.middleware.js
+ │    multer.middleware.js
+ │
+ ├ utils
+ │    ApiError.js
+ │    ApiResponse.js
+ │    asyncHandler.js
+ │
+ └ app.js
+
+
+⸻
+
+Example API Endpoint
+
+Upload Video
+
+POST /api/v1/videos
+
+Form data:
+
+videofile
+thumbnail
+title
+description
+
+Response:
+
+{
+  "statusCode": 201,
+  "message": "Video uploaded successfully"
+}
+
+
+⸻
+
+Error Handling
+
+The project uses a custom error system:
+
+ApiError
+ApiResponse
+asyncHandler
+
+Benefits:
+	•	Centralized error handling
+	•	Clean controller logic
+	•	Consistent API responses
+
+⸻
+
+Key Learning Outcomes
+
+This project demonstrates:
+	•	REST API design
+	•	Middleware architecture
+	•	JWT authentication
+	•	File upload pipelines
+	•	Cloudinary integration
+	•	MongoDB schema design
+	•	Aggregation queries
+	•	Secure backend practices
+
+⸻
+
+Future Improvements
+
+Potential improvements include:
+	•	Video streaming support
+	•	Recommendation system
+	•	Redis caching
+	•	WebSockets for live notifications
+	•	Rate limiting
+	•	Advanced search using Elasticsearch
+
+⸻
+
+If you’d like, I can also help you create a much stronger GitHub README (one that looks like a production open-source project) with:
+	•	badges
+	•	architecture diagram
+	•	API table
+	•	setup instructions
+	•	screenshots
+	•	deployment guide
+
+That version looks much more impressive to recruiters.
