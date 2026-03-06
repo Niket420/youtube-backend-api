@@ -329,14 +329,3 @@ Potential improvements include:
 - Rate limiting
 - Advanced search using Elasticsearch
 
----
-
-If you’d like, I can also help you create a much stronger GitHub README (one that looks like a production open-source project) with:
-- badges
-- architecture diagram
-- API table
-- setup instructions
-- screenshots
-- deployment guide
-
-That version looks much more impressive to recruiters.
