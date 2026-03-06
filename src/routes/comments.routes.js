@@ -2,7 +2,7 @@ import {getVideoComments,
     addComment, 
     updateComment,
      deleteComment
-    } from "../controllers/subscriber.controllers.js"
+    } from "../controllers/comments.controllers.js"
 
 import verifyJWT from "../middlewares/auth.middleware.js"
 import {Router} from 'express'

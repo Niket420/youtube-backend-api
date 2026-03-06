@@ -2,7 +2,7 @@ import {toggleCommentLikes,
     toggleTweetLikes,
     toggleVideoLikes,
     getLikedVideos
-    } from "../controllers/subscriber.controllers.js"
+    } from "../controllers/like.controllers.js"
 
 import verifyJWT from "../middlewares/auth.middleware.js"
 import {Router} from 'express'

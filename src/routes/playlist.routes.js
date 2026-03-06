@@ -5,7 +5,7 @@ import {createPlaylist,
     removeVideoFromPlaylist,
     deletePlaylist,
     updatePlaylist
-    } from "../controllers/subscriber.controllers.js"
+    } from "../controllers/playlist.controllers.js"
 
 import verifyJWT from "../middlewares/auth.middleware.js"
 import {Router} from 'express'
