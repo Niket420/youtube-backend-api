@@ -1,9 +1,69 @@
 # YouTube Platform Backend API
 
+![Node.js](https://img.shields.io/badge/Node.js-20%2B-339933?logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express.js-Backend-black?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/Auth-JWT-blue)
+![Cloudinary](https://img.shields.io/badge/Media-Cloudinary-3448C5)
+
 A production-ready backend API for a video platform built with Node.js, Express, and MongoDB.
 This system provides complete functionality for video publishing, user authentication, playlists, subscriptions, comments, likes, and channel analytics.
 
 The API follows a RESTful architecture, includes JWT authentication, file uploads with Multer, Cloudinary media storage, and secure middleware-based authorization.
+
+---
+
+## Quick Start
+
+### 1) Clone and install dependencies
+
+```bash
+git clone <your-repo-url>
+cd c.you_tube_proj
+npm install
+```
+
+### 2) Configure environment variables
+
+Create a `.env` file in the project root and add your values:
+
+```env
+PORT=8000
+MONGODB_URI=<your-mongodb-uri>
+CORS_ORIGIN=<your-frontend-origin>
+ACCESS_TOKEN_SECRET=<your-access-token-secret>
+ACCESS_TOKEN_EXPIRY=1d
+REFRESH_TOKEN_SECRET=<your-refresh-token-secret>
+REFRESH_TOKEN_EXPIRY=10d
+CLOUDINARY_CLOUD_NAME=<your-cloudinary-name>
+CLOUDINARY_API_KEY=<your-cloudinary-api-key>
+CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
+```
+
+### 3) Start the server
+
+```bash
+npm run dev
+```
+
+---
+
+## API Overview
+
+| Module | Method | Endpoint | Description |
+|---|---|---|---|
+| Health | GET | `/api/v1/healthcheck` | Check API health/status |
+| Users | POST | `/api/v1/users/register` | Register a new user |
+| Users | POST | `/api/v1/users/login` | Login user |
+| Users | GET | `/api/v1/users/current-user` | Get logged-in user profile |
+| Videos | GET | `/api/v1/videos` | Get all videos with filters |
+| Videos | POST | `/api/v1/videos` | Publish/upload a video |
+| Videos | PATCH | `/api/v1/videos/:videoId` | Update video details/thumbnail |
+| Videos | DELETE | `/api/v1/videos/:videoId` | Delete a video |
+| Playlist | POST | `/api/v1/playlist` | Create a playlist |
+| Comments | POST | `/api/v1/comments/:videoId` | Add comment to a video |
+| Likes | POST | `/api/v1/likes/toggle/v/:videoId` | Toggle like on a video |
+| Subscriptions | POST | `/api/v1/subscriptions/c/:channelId` | Subscribe/Unsubscribe channel |
 
 ---
 
