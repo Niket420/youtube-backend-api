@@ -2,10 +2,11 @@
   "name": "youtube",
   "version": "1.0.0",
   "description": "Backend API for YouTube",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "code": "node index.js"
+    "dev": "nodemon src/index.js",
+    "code": "node src/index.js"
   },
   "author": "Niket Anand",
   "license": "ISC",

@@ -27,5 +27,5 @@ const uploadOnCloudinary = async(localPath)=>{
    
 }
 
-export {uploadCloudinary}
+export {uploadOnCloudinary}
     

@@ -5,8 +5,8 @@ import {getAllVideos,
     deleteVideo,
     togglePublishStatus} from "../controllers/video.controllers.js"
 import {Router} from "express"
-import verifyJWT from "../middlewares/auth.middleware.js"
-import upload from "../middlewares/multer.middleware.js"
+import {verifyJWT} from "../middlewares/auth.middleware.js"
+import {upload} from "../middlewares/multer.middleware.js"
 
 const router = Router()
 router.use(verifyJWT); 

@@ -5,20 +5,20 @@ const { Schema } = mongoose;
 
 const videoSchema = new Schema({
     videofile:{
-        type:string,
+        type:String,
         required:true},
 
     thumbnail:{
-        type:string,
+        type:String,
          required:true
     },
 
     title:{
-        type:string,
+        type:String,
          required:true
     },
     description:{
-        type:string,
+        type:String,
         required:true
     },
     duration:{
@@ -30,12 +30,12 @@ const videoSchema = new Schema({
         default:0
     },
     isPublished:{
-        type:boolean,
+        type:Boolean,
         default:true
     },
     
      owner:{
-        type:Schema.type.ObjectId,
+        type:Schema.Types.ObjectId,
         ref: "User"
     },
 

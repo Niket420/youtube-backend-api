@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"
 
-const Schema = mongoose
+const {Schema} = mongoose
 
 const LikesSchema = new Schema({
     comment : {

@@ -2,7 +2,7 @@ import {asyncHandler} from "../utils/asynchandler.js"
 import {APIError} from "../utils/APIError.js"
 import {APIResponse} from "../utils/APIResponse.js"
 import {User} from "../models/users.model.js"
-import {uploadCloudinary} from "../utils/cloudinary.js"
+import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import jwt from 'jsonwebtoken'
 
 
@@ -19,8 +19,8 @@ const registerUser = asyncHandler(async(req,res)=>{
     if(!avatarPath){ throw new APIError(400,"Please upload avatarURL")}
     if(!coverImagePath) {throw new APIError(400,"Please upload coverImagePath")}
 
-    const avatar = await uploadCloudinary(avatarPath)
-    const coverImg = await uploadCloudinary(coverImagePath)
+    const avatar = await uploadOnCloudinary(avatarPath)
+    const coverImg = await uploadOnCloudinary(coverImagePath)
 
     if(!avatar || !coverImg) {throw new APIError(400,"Please upload the required Images")}
 
@@ -231,7 +231,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         await cloudinary.v2.uploader.destroy(user.avatar.public_id);
     }
 
-    const newAvatar = await uploadCloudinary(AvatarImgLocalPath);
+    const newAvatar = await uploadOnCloudinary(AvatarImgLocalPath);
 
     if (!newAvatar) {
         throw new APIError(400, "Image Upload Failed");
@@ -268,7 +268,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
         await cloudinary.v2.uploader.destroy(user.coverImage.public_id);
     }
 
-    const newCover = await uploadCloudinary(CoverImgLocalPath);
+    const newCover = await uploadOnCloudinary(CoverImgLocalPath);
 
     if (!newCover) {
         throw new APIError(400, "Image Upload Failed");
@@ -292,29 +292,9 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
         .json(new APIResponse(200, updatedUser, "Avatar updated successfully"));
 });
 
-// const getUserChannelProfile = asyncHandler(async(req,res)=>{
-//     const {username} = req.params
+const getUserChannelProfile = {}
 
-//     if(!username?.trim()){
-//         throw new APIError(400,"user not found")
-//     }
-
-//     const channel = await User.aggregate([
-//         {
-//             $match : {
-//                 username : username?.tolowercase()
-//             }
-//         },
-
-//         {
-
-//         }
-//     ])
-
-
-// })
-
-// const getWatchHistory = {}
+const getWatchHistory = {}
 
 export {
     registerUser,
