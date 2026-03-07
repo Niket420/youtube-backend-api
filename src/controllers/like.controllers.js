@@ -1,16 +1,16 @@
-import mongoose, {isValidObjectId} from "mongoose"
-import {Likes} from "../models/likes.model.js"
-import {APIError} from "../utils/APIError.js"
-import {APIResponse} from "../utils/APIResponse.js"
-import {asyncHandler} from "../utils/asynchandler.js"
+import mongoose, { isValidObjectId } from "mongoose"
+import { Likes } from "../models/likes.model.js"
+import { APIError } from "../utils/APIError.js"
+import { APIResponse } from "../utils/APIResponse.js"
+import { asyncHandler } from "../utils/asynchandler.js"
 
 
 const toggleVideoLikes = asyncHandler(async (req, res) => {
 
     const { videoId } = req.params
 
-    if (!videoId) {
-        throw new APIError(400, "videoId is missing")
+    if (!isValidObjectId(videoId)) {
+        throw new APIError(400, "Invalid video ID")
     }
 
     const existingLike = await Likes.findOne({
@@ -42,12 +42,13 @@ const toggleVideoLikes = asyncHandler(async (req, res) => {
     }
 })
 
+
 const toggleCommentLikes = asyncHandler(async (req, res) => {
 
     const { commentId } = req.params
 
-    if (!commentId) {
-        throw new APIError(400, "Comment ID is missing")
+    if (!isValidObjectId(commentId)) {
+        throw new APIError(400, "Invalid comment ID")
     }
 
     const existingLike = await Likes.findOne({
@@ -79,11 +80,13 @@ const toggleCommentLikes = asyncHandler(async (req, res) => {
     }
 })
 
-const toggleTweetLikes = asyncHandler(async (req, res) => {
-    const {tweetId} = req.params
 
-    if (!tweetId) {
-        throw new APIError(400, "tweet ID is missing")
+const toggleTweetLikes = asyncHandler(async (req, res) => {
+
+    const { tweetId } = req.params
+
+    if (!isValidObjectId(tweetId)) {
+        throw new APIError(400, "Invalid tweet ID")
     }
 
     const existingLike = await Likes.findOne({
@@ -113,8 +116,7 @@ const toggleTweetLikes = asyncHandler(async (req, res) => {
             new APIResponse(200, {}, "Tweet unliked")
         )
     }
-}
-)
+})
 
 
 const getLikedVideos = asyncHandler(async (req, res) => {
@@ -125,11 +127,11 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         likedBy: userId,
         video: { $exists: true }
     })
-    .populate({
-        path: "video",
-        select: "title thumbnail views owner createdAt"
-    })
-    .sort({ createdAt: -1 })
+        .populate({
+            path: "video",
+            select: "title thumbnail views owner createdAt"
+        })
+        .sort({ createdAt: -1 })
 
     return res.status(200).json(
         new APIResponse(
@@ -139,7 +141,6 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         )
     )
 })
-
 
 
 export {
