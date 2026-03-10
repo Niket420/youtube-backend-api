@@ -9,13 +9,13 @@ import jwt from 'jsonwebtoken'
 const registerUser = asyncHandler(async (req, res) => {
 
     const { username, email, fullname, password } = req.body;
-
     const existedUser = await User.findOne({ $or: [{ username }, { email }] });
-
+    
     if (existedUser) {
-        throw new APIError(409, "User already exists");
+        throw new APIError(409, "User already exists 2");
     }
-
+    console.log(req.body)
+    console.log(req.files)
     const avatarPath = req.files?.avatar?.[0]?.path;
     const coverImagePath = req.files?.coverImage?.[0]?.path;
 
@@ -27,8 +27,10 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new APIError(400, "Please upload cover image");
     }
 
+    
     const avatar = await uploadOnCloudinary(avatarPath);
     const coverImg = await uploadOnCloudinary(coverImagePath);
+
 
     if (!avatar || !coverImg) {
         throw new APIError(400, "Image upload failed");
