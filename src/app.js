@@ -40,6 +40,27 @@ app.use("/api/v1/likes", likeRouter)
 app.use("/api/v1/playlist", playlistRouter)
 app.use("/api/v1/dashboard", dashboardRouter)
 
+app.use((req, res) => {
+    return res.status(404).json({
+        success: false,
+        message: `Route not found: ${req.originalUrl}`
+    })
+})
+
+app.use((err, req, res, next) => {
+    if (res.headersSent) {
+        return next(err)
+    }
+
+    const statusCode = err?.statusCode || 500
+
+    return res.status(statusCode).json({
+        success: false,
+        message: err?.message || "Internal Server Error",
+        errors: err?.errors || []
+    })
+})
+
 // http://localhost:8000/api/v1/users/register
 
 export { app }

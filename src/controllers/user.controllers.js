@@ -8,7 +8,7 @@ import jwt from 'jsonwebtoken'
 
 const registerUser = asyncHandler(async (req, res) => {
 
-    const { username, email, fullname, password } = req.body;
+    const { username, email, fullName, password } = req.body;
     const existedUser = await User.findOne({ $or: [{ username }, { email }] });
     
     if (existedUser) {
@@ -39,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const user = await User.create({
         username,
         email,
-        fullname,
+        fullName,
         password,
         avatar: avatar.url,
         coverImage: coverImg.url
@@ -57,7 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
     );
 });
 
-const generateAccessAndRefreshToken = asyncHandler(async (userId) => {
+const generateAccessAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId)
 
@@ -76,7 +76,7 @@ const generateAccessAndRefreshToken = asyncHandler(async (userId) => {
             "Something went wrong while generating refresh and access token"
         )
     }
-})
+}
 
 
 
